@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createClient } from "@/lib/supabase";
 
 interface PlanetPosition {
   sign: string;
@@ -48,10 +49,19 @@ export default function Home() {
   const [selectedLocation, setSelectedLocation] = useState<LocationSuggestion | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [unknownTime, setUnknownTime] = useState(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [chart, setChart] = useState<NatalChart | null>(null);
   const [error, setError] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setAccessToken(session?.access_token ?? null);
+      console.log('[page] accessToken present on mount:', !!(session?.access_token));
+    });
+  }, []);
 
   useEffect(() => {
     if (location.length < 3) {
@@ -109,6 +119,7 @@ export default function Home() {
           year, month, day, hour, minute,
           lat: selectedLocation.lat,
           lng: selectedLocation.lng,
+          accessToken,
         }),
       });
 
@@ -183,7 +194,7 @@ export default function Home() {
               <circle cx="14" cy="5" r="1.6" fill="#C9A84C"/>
               <circle cx="23" cy="14" r="0.9" fill="#1C3D2E" opacity="0.3"/>
             </svg>
-            <span style={{ fontFamily: "DM Serif Display, serif", fontSize: "22px", color: "#1A1A18", letterSpacing: "-0.01em" }}>Orbit</span>
+            <span style={{ fontFamily: "DM Serif Display, serif", fontSize: "22px", color: "#1A1A18", letterSpacing: "-0.01em" }}>Hello Orbit</span>
           </div>
 
           <p style={{ fontSize: "11px", fontWeight: 500, color: "#A8A49C", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>
@@ -276,7 +287,7 @@ export default function Home() {
               cursor: "pointer",
               fontFamily: "Inter, sans-serif",
             }}>
-            Enter Orbit
+            Enter Hello Orbit
           </button>
         </div>
       </main>
@@ -300,7 +311,7 @@ export default function Home() {
             <circle cx="14" cy="5" r="1.6" fill="#C9A84C"/>
             <circle cx="23" cy="14" r="0.9" fill="#1C3D2E" opacity="0.3"/>
           </svg>
-          <span style={{ fontFamily: "DM Serif Display, serif", fontSize: "22px", color: "#1A1A18", letterSpacing: "-0.01em" }}>Orbit</span>
+          <span style={{ fontFamily: "DM Serif Display, serif", fontSize: "22px", color: "#1A1A18", letterSpacing: "-0.01em" }}>Hello Orbit</span>
         </div>
 
         <h1 style={{ fontFamily: "DM Serif Display, serif", fontSize: "36px", fontWeight: 400, color: "#1A1A18", letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "16px" }}>

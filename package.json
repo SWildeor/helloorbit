@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.104.1",
     "@types/luxon": "^3.7.1",
     "geo-tz": "^8.1.6",
     "luxon": "^3.7.2",
